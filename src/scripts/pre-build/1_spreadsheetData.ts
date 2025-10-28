@@ -4,13 +4,11 @@ import {getGoogleSheetsDataArr} from "@/components/gsheets";
 import {
     mainFODDataPath,
     statistics333projectPath,
-    cgia_19_127Path,
     prikhodyMainDataPath,
     prikhodyArchivesDataPath,
     digitedFormattedDataPath,
     rejectedFormattedPath,
     indexedNIABDataPath,
-    orthodox_catholicNameDataPath
 } from "@/components/paths";
 
 export interface SpreadsheetConfig {
@@ -3408,10 +3406,6 @@ const spreadsheetsConfig: SpreadsheetsArrayConfig = {
         spreadsheetId: process.env.TABLE_STAT333 as string,
         range: 'Опись 333-9!A3:J'
     },
-    cgia_19_127: {
-        spreadsheetId: process.env.TABLE_CGIA_19_127 as string,
-        range: 'main!A1:H'
-    },
     prikhodyMain: {
         spreadsheetId: process.env.TABLE_PRIKHODY_MAIN as string,
         range: 'main!A2:H'
@@ -3419,14 +3413,6 @@ const spreadsheetsConfig: SpreadsheetsArrayConfig = {
     prikhodyArchives: {
         spreadsheetId: process.env.TABLE_PRIKHODY_MAIN as string,
         range: 'archives!A2:I'
-    },
-    catholicName: {
-        spreadsheetId: process.env.TABLE_ORTHODOX_CATHOLICS_NAME as string,
-        range: 'catholic!A1:D'
-    },
-    orthodoxName: {
-        spreadsheetId: process.env.TABLE_ORTHODOX_CATHOLICS_NAME as string,
-        range: 'orthodox!A1:F'
     },
     // Add new spreadsheets here as needed
 };
@@ -3440,14 +3426,9 @@ export default async function () {
         rejected,
         digited,
         stat333,
-        cgia_19_127,
         prikhodyMain,
         prikhodyArchives,
-        catholicName,
-        orthodoxName
     } = await getGoogleSheetsDataArr(spreadsheetsConfig);
-
-    writeFile(cgia_19_127Path, cgia_19_127);
 
     writeFile(prikhodyMainDataPath, prikhodyMain);
 
@@ -3464,7 +3445,7 @@ export default async function () {
 
     writeFile(statistics333projectPath, stat333);
 
-    const indexedFormattedData: any = indexed.reduce((pool: any, [fond, opis, value]: any, index: number, arr: Array<any>) => {
+    const indexedFormattedData: any = indexed.reduce((pool: any, [fond, opis, value]: any) => {
         if (!pool[fond]) {
             pool[fond] = {};
         }
@@ -3476,7 +3457,7 @@ export default async function () {
 
     writeFile(indexedNIABDataPath, indexedFormattedData);
 
-    const digitedFormattedData: any = digited.reduce((pool: any, [fond, opis, value, comment]: any, index: number, arr: Array<any>) => {
+    const digitedFormattedData: any = digited.reduce((pool: any, [fond, opis, value, comment]: any) => {
         if (!pool[fond]) {
             pool[fond] = {};
         }
@@ -3493,7 +3474,7 @@ export default async function () {
     const rejectedRawData: any = rejected
         .filter((v: any) => v.length);
 
-    const rejectedFormattedData = rejectedRawData.reduce((pool: any, [fond, opis, delo, title, req, answer, reason, send, scan, contact, comment]: any, index: number, arr: Array<any>) => {
+    const rejectedFormattedData = rejectedRawData.reduce((pool: any, [fond, opis, delo, title, req, answer, reason, send, scan, contact, comment]: any) => {
         if (!pool[fond]) {
             pool[fond] = {};
         }
@@ -3647,10 +3628,6 @@ export default async function () {
 
         }
     };
-    const catholicNameData = catholicName.map(handleNameRow());
-    const orthodoxNameData = orthodoxName.map(handleNameRow());
-
-    writeFile(orthodox_catholicNameDataPath, [...catholicNameData, ...orthodoxNameData]);
 }
 
 function writeFile(
