@@ -1,41 +1,35 @@
-import Link from "next/link";
-import './main-page.css';
+import fs from "fs";
+import {prikhodyMainDataPath} from "@/components/paths";
+import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
+import {Metadata} from "next";
 
-const links = [
-    {
-        href: "/prikhody",
-        title: "Приходы Беларуси",
-        description: "Карта церквей и костелов. Сохранность метрических записей.",
+export const metadata: Metadata = {
+    title: 'Карта приходов',
+    description: 'Карта церквей и костелов Беларуси. Генеалогия. Сохранность',
+    other: {
+        robots: "index, follow",
+        charset: "UTF-8",
+        image: 'https://cdn4.cdn-telegram.org/file/LEDF-rXjeG2hzZSgfio-6lkyWL1p6J29nfFdc555tpdDjMQyOCPqEVUnHr_gflhCPQrrXnImDX_Hk-dklHzzB5uG6lLVsUMCm7d3ZgYWoznIe_Kv7Pr8BToJL2Fujyy9PjrLp3hbmoI2rCMYcHsY7kcblqBhpJOEEuIaRI2xlZZv27WLld-Ns4wndYSR8Gf33QsXwP42sLUCZ4xf4O_-R2RxXPNw7TNYQQJ3w-4BPVj8pkFNXRME-VCCWT9CFa_J094agR9YITHjkbn6ELiF4wELXvp93ShCqvPUwT1pr9Ys7myYqUwQtlp6u4kci1_Bp3xsBjKOrz0IdlKA7Qi5Hw.jpg',
+        url: 'https://shappoff.github.io/prikhody',
+        type: 'website'
     },
-];
+    keywords: ['Карта', 'Беларусь', 'Церкви', 'Костелы', 'генеалогия', 'Сохранность'],
+    robots: { index: true, follow: true },
+    icons: [
+        {
+            url: '/map-icon.svg',
+            type: 'image/svg+xml',
+            sizes: 'any',
+            rel: 'icon'
+        }
+    ],
+
+};
 
 export default function Home() {
+    const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
+
     return (
-        <div className="page-container">
-            <div className="content-container">
-                <div className="links-grid" style={{opacity: 1, willChange: 'opacity'}}>
-                    {
-                        links.map(({href, title, description}: any, index: number) => <div className="link-card" style={{animationDelay: `${index + 1}00ms`}}>
-                            <Link href={href} className="card-content">
-                                <div className="card-header">
-                                    <div>
-                                        <h2 className="card-title">{title}</h2>
-                                        <p className="card-description">{description}</p>
-                                    </div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                         strokeLinejoin="round"
-                                         className="lucide lucide-external-link card-icon">
-                                        <path d="M15 3h6v6"></path>
-                                        <path d="M10 14 21 3"></path>
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                    </svg>
-                                </div>
-                            </Link></div>)
-                    }
-                </div>
-            </div>
-        </div>
+        <WrapToMarkerClusterGroup items={allPrikhods} bounds={false} />
     );
 }

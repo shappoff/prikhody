@@ -2,7 +2,7 @@
 
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../../app/prikhody/prikhody.css';
+import '../../../app/prikhody.css';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -141,19 +141,19 @@ const PrikhodyMapApp = ({children, items}: any) => {
 
         optionsItmes.unshift({
                 label: 'Приходы без информации о сохранности',
-                value: '/prikhody/noinfo'
+                value: '/noinfo'
             });
         optionsItmes.unshift({
             label: 'Приходы c оцифрованными делами в НИАБ Минск',
-            value: '/prikhody/digited'
+            value: '/digited'
         });
         optionsItmes.unshift({
             label: 'Католические',
-            value: '/prikhody/catholics'
+            value: '/catholics'
         });
         optionsItmes.unshift({
             label: 'Православные',
-            value: '/prikhody/orthodox'
+            value: '/orthodox'
         });
 
         setuOptions(optionsItmes);
@@ -232,7 +232,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                         onChange={(event: any, newValueItem: any | null) => {
                             if (newValueItem && newValueItem.value) {
                                 setSelectedPrikhodItem(newValueItem);
-                                router.push(`/prikhody/p/${newValueItem.value}`);
+                                router.push(`/p/${newValueItem.value}`);
                             } else {
                                 if (~pathname.indexOf('/p/')) {
                                     setSelectedPrikhodItem(void(0));
@@ -262,7 +262,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                                 if (~newValueItem.value.indexOf('prikhody')) {
                                     router.push(`${newValueItem.value}`);
                                 } else {
-                                    router.push(`/prikhody/atd/${newValueItem.value}`);
+                                    router.push(`/atd/${newValueItem.value}`);
                                 }
                                 setSelectedATDItem(newValueItem);
                             } else {

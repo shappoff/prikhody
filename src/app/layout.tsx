@@ -1,6 +1,8 @@
 import type {Metadata, Viewport} from "next";
 import GAAnalytics from "@/components/shared/GAAnalytics";
-import "./globals.css";
+import Prikhody from "@/components/featured/prikhody/Prikhody";
+import fs from "fs";
+import {prikhodyMainDataPath} from "@/components/paths";
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -24,13 +26,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
+
   return (
     <html lang="ru">
     {
       !!process.env.DEBUG ? <></> : <GAAnalytics />
     }
       <body>
-        {children}
+      <>
+        <Prikhody items={allPrikhods}>
+          {children}
+        </Prikhody>
+        <div id="slide-panel-info" />
+      </>
       </body>
     </html>
   );

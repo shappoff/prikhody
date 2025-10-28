@@ -6,7 +6,7 @@ import {
     rejectedFormattedPath
 } from "@/components/paths";
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
-import InfoPage from "../../../../components/featured/prikhody/InfoPage";
+import InfoPage from "../../../components/featured/prikhody/InfoPage";
 
 
 type Params = {
