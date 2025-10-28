@@ -15,7 +15,7 @@ const Markers = ({items, markerLabel}: any) => {
             markerLabel={markerLabel}
         >
             <div>
-                <Link href={`/prikhody/p/${objectID}`}><big>Подробнее</big></Link>
+                <Link href={`/p/${objectID}`}><big>Подробнее</big></Link>
             </div>
         </PrikhodPlaceMarker> : <></>
     })
