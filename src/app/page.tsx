@@ -1,5 +1,4 @@
 import Link from "next/link";
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import './main-page.css';
 
 const links = [
