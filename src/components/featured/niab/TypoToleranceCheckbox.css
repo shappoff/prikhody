@@ -1,9 +1,0 @@
-.typo-tolerance-checkbox-label.form-control-label-ff.form-check-label-ff {
-    margin: 0 10px 0 5px;
-}
-
-@media (max-width: 560px) {
-    .form-check-label {
-        display: none;
-    }
-}
