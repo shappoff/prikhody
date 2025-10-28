@@ -3,21 +3,11 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import './main-page.css';
 
 const links = [
-    {href: "/catalogarchivesgov", title: "Карта аэрофотосъемки", description: "Немецкие аэрофотоснимки Беларуси времен ВОВ. С сайта catalog.archives.gov"},
     {
         href: "/prikhody",
         title: "Приходы Беларуси",
         description: "Карта церквей и костелов. Сохранность метрических записей.",
     },
-    {
-        href: "/niab",
-        title: "Фонды и описи НИАБ",
-        description: "Удобный поиск описей по фондам НИАБ (Национальный исторический архив Беларуси).",
-    },
-    {href: "/zhigalo", title: "Дневник Семёна Жигало", description: "Этот дневник был найден в деревне Скакуновщина в старой хате за печкой во время ремонта. Он велся с 1930-го по 1943-й годы."},
-    {href: "/names", title: "Имена, католические и православные", description: "Удобный сервис для подбора неразборчиво написанных имён."},
-    {href: "/kp", title: "Книги Память", description: "Проиндексированные книги. Удобен поиск по всей книге (Ctrl+F)"},
-    {href: "/docs", title: "Документы", description: "Карты, аэрофотоснимки, документы"},
 ];
 
 export default function Home() {
