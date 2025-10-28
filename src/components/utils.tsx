@@ -129,11 +129,3 @@ export function plural(number: number, titles: Array<string> = ['фонд', 'ф�
     return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
 }
 
-export const openInNewTab = (url: string): Window | null => {
-    const newWindow: Window | null = window.open(url, '_blank', 'noopener,noreferrer,width=400,height=400');
-    if (newWindow) {
-        newWindow.opener = null;
-    }
-
-    return newWindow;
-}
