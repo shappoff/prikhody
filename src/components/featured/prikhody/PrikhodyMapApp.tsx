@@ -175,7 +175,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
         if (history.length > 2) {
             router.back();
         } else {
-            router.push('/prikhody1')
+            router.push('/')
         }
     };
     React.useEffect(() => {
@@ -238,7 +238,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                                     setSelectedPrikhodItem(void(0));
                                     goBack();
                                 } else {
-                                    router.push(`/prikhody1`);
+                                    router.push(`/`);
                                 }
                             }
                         }}
@@ -271,7 +271,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                                     setSelectedPrikhodItem(null);
                                     goBack();
                                 } else {
-                                    router.push(`/prikhody1`);
+                                    router.push(`/`);
                                 }
                             }
                         }}
