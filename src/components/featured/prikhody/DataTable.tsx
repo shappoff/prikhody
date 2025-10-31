@@ -46,7 +46,7 @@ export default function DataTable({data, digited, rejected}: any) {
                 const {year, type, short, fod, link, full, fond, opis, delo, id} = params.row;
                 return <React.Fragment>
                     {
-                        short === 'НИАБ' ? <Link target="_blank" href={`/niab/${fond}`}><u>{fond}</u></Link> : fond
+                        short === 'НИАБ' ? <Link target="_blank" href={`${location.origin}/niab/${fond}`}><u>{fond}</u></Link> : fond
                     }
                     {opis ? `-${opis}` : ''}{delo ? `-${delo}` : ''}
                 </React.Fragment>;
