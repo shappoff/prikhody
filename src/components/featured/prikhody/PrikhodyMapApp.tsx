@@ -22,18 +22,16 @@ import LayersControlComponent from "@/components/featured/prikhody/LayersControl
 import SetMapSizeOnChange from "@/components/featured/prikhody/SetMapSizeOnChange";
 import useDebounce from "@/components/shared/useDebounce";
 
-import algoliasearch from 'algoliasearch/lite';
+import {liteClient} from 'algoliasearch/lite';
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
 import HomeButton from "@/components/shared/HomeButton";
 import Spinner from "@/components/shared/Spinner";
 declare const process: any;
 
-const client = algoliasearch(
+const client = liteClient(
     process.env.NEXT_PUBLIC_PPFF_ALGOLIA_APPLICATION_ID,
     process.env.NEXT_PUBLIC_PPFF_ALGOLIA_SEARCH_API_KEY
 );
-
-const prikhodyIndex = client.initIndex('prikhodyIndex');
 
 const PrikhodyMapApp = ({children, items}: any) => {
     const filterBarRef = React.useRef(null);
@@ -61,11 +59,16 @@ const PrikhodyMapApp = ({children, items}: any) => {
         setPrikhodyDataArray([]);
         if (debouncedSearchTerm && debouncedSearchTerm.length) {
             setIsLoading(true);
-            prikhodyIndex.search(debouncedSearchTerm, {
-                hitsPerPage: 1000,
-                typoTolerance
+            client.search({
+                requests: [{
+                    indexName: 'prikhodyIndex',
+                    query: debouncedSearchTerm,
+                    hitsPerPage: 1000,
+                    typoTolerance
+                }]
             })
-                .then(({hits}: any) => {
+                .then(({results}: any) => {
+                    const hits = results?.[0]?.hits ?? [];
 
                     const withCoords: Array<any> = [];
                     const noCoords: Array<any> = [];
