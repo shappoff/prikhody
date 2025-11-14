@@ -1,5 +1,5 @@
 {
-  "name": "shappoff",
+  "name": "prikhody",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,7 @@
     "bootstrap": "^5.3.3",
     "cyrillic-to-translit-js": "^3.2.1",
     "firebase": "^11.3.0",
-    "googleapis": "^153.0.0",
+    "googleapis": "^166.0.0",
     "leaflet": "^1.9.4",
     "next": "15.1.2",
     "react": "^19.0.0",
