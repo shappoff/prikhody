@@ -31,6 +31,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Clean up disk space
+        run: |
+          sudo apt clean || true
+          sudo rm -rf /tmp/* || true
+          docker system prune -f || true
       - name: Detect package manager
         id: detect-package-manager
         run: |
