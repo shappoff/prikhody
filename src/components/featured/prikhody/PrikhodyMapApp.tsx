@@ -258,8 +258,8 @@ const PrikhodyMapApp = ({children, items}: any) => {
                         options={uOptions}
                         sx={{ flexGrow: 1 }}
                         onChange={(event: any, newValueItem: any | null) => {
-                            if (newValueItem && newValueItem.value) {
-                                if (~newValueItem.value.indexOf('prikhody')) {
+                            if (newValueItem?.value) {
+                                if (newValueItem.value.startsWith('/')) {
                                     router.push(`${newValueItem.value}`);
                                 } else {
                                     router.push(`/atd/${newValueItem.value}`);
