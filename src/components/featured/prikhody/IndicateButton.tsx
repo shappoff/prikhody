@@ -1,7 +1,8 @@
 import L from "leaflet";
 import React from "react";
 import {useMap} from "react-leaflet";
-import Badge from "react-bootstrap/Badge";
+import Chip from '@mui/material/Chip';
+import EditLocationIcon from '@mui/icons-material/EditLocation';
 
 // Define type for IndicateButton props
 interface IndicateButtonProps {
@@ -18,7 +19,7 @@ interface IndicateButtonProps {
 
 const IndicateButton = ({item, callBack, label = 'указать на карте', setIsShowPanel}: IndicateButtonProps) => {
     const map = useMap();
-    return <Badge bg="secondary" className="indicate-button"
+    return <Chip icon={<EditLocationIcon />} className="indicate-button" label={label} size="small"
                  onClick={() => {
                      callBack && callBack();
                      const mapElement = document.getElementById('map');
@@ -58,7 +59,7 @@ const IndicateButton = ({item, callBack, label = 'указать на карте
                          map.on('click', clichHandler);
                      });
                  }}
-    >{label}</Badge>
+    />
 };
 
 const sendTGMessage = (text: string) => {

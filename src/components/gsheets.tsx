@@ -1,7 +1,6 @@
-import { google } from "googleapis";
-import {AnyAuthClient} from "google-auth-library";
-import {sheets_v4} from "googleapis/build/src/apis/sheets/v4";
-import {SpreadsheetsArrayConfig} from "@/scripts/pre-build/1_spreadsheetData";
+import { google, sheets_v4 } from "googleapis";
+import { AnyAuthClient } from "google-auth-library";
+import { SpreadsheetsArrayConfig } from "@/scripts/pre-build/1_spreadsheetData";
 
 const getAuthedSheets = async (): Promise<sheets_v4.Sheets> => {
     const auth: AnyAuthClient = await google.auth.getClient({
