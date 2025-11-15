@@ -59,7 +59,7 @@ const IndicateButton = ({item, callBack, label = 'указать на карте
                          map.on('click', clichHandler);
                      });
                  }}
-    >{label}</Chip>
+    />
 };
 
 const sendTGMessage = (text: string) => {
