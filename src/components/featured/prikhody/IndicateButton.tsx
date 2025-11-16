@@ -1,8 +1,8 @@
 import L from "leaflet";
 import React from "react";
 import {useMap} from "react-leaflet";
-import Chip from '@mui/material/Chip';
-import EditLocationIcon from '@mui/icons-material/EditLocation';
+import Chip from '@/components/shared/Chip';
+import { EditLocationIcon } from '@/components/shared/icons';
 
 // Define type for IndicateButton props
 interface IndicateButtonProps {

@@ -1,6 +1,6 @@
 import React from "react";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import styled from 'styled-components';
+import TextField from '@/components/shared/TextField';
 
 // Define type for FilterBar props
 interface FilterBarProps {
@@ -18,6 +18,13 @@ interface FilterBarProps {
     children?: React.ReactNode;
 }
 
+const StyledForm = styled.form`
+    & > :not(style) {
+        margin: 8px;
+        width: 25ch;
+    }
+`;
+
 const FilterBar = ({
                        searchHandler,
                        keysHandler,
@@ -33,14 +40,12 @@ const FilterBar = ({
                         children
                    }: FilterBarProps) => {
     return <>
-        <Box
-            component="form"
-            sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
+        <StyledForm
             noValidate
             autoComplete="off"
         >
             <TextField size="small" value={searchTerm} onChange={searchHandler} id="outlined-basic" label="Церковь / Костел" variant="outlined" />
-        </Box>
+        </StyledForm>
         {children}
     </>
 };

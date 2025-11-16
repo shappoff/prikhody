@@ -1,7 +1,7 @@
 import React from "react";
-import Button from '@mui/material/Button';
-import HomeIcon from '@mui/icons-material/Home';
-import Tooltip from '@mui/material/Tooltip';
+import Button from './Button';
+import { HomeIcon } from './icons';
+import Tooltip from './Tooltip';
 
 const HomeButton = ({absolute, variant}: any) => {
     return <Tooltip title="На главную страницу">

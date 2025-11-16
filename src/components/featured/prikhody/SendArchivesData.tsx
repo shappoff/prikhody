@@ -1,7 +1,7 @@
 import {sendTGMessage} from "@/components/featured/prikhody/IndicateButton";
 import React from "react";
-import Textarea from '@mui/joy/Textarea';
-import {Button} from "@mui/material";
+import Textarea from '@/components/shared/Textarea';
+import Button from "@/components/shared/Button";
 
 const SendArchivesData = ({objectID}: any) => {
     return <React.Fragment>

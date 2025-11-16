@@ -2,8 +2,8 @@
 
 import dynamic from "next/dynamic";
 import React from "react";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import CircularProgress from '@/components/shared/CircularProgress';
+import Box from '@/components/shared/Box';
 
 const Prikhody = ({children, items}: any) => {
     const MapApp = React.useMemo(() => dynamic(

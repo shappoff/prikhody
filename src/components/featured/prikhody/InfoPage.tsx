@@ -1,18 +1,19 @@
 'use client'
 
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import Drawer from '@/components/shared/Drawer';
+import IconButton from '@/components/shared/IconButton';
+import { CloseIcon } from '@/components/shared/icons';
 import {useRouter} from 'next/navigation'
-import {Button} from "@mui/material";
+import Button from "@/components/shared/Button";
 import React from "react";
+import styled from 'styled-components';
 import CreatePortalWrapper from "@/components/shared/CreatePortalWrapper";
-import Box from '@mui/material/Box';
+import Box from '@/components/shared/Box';
 import './InfoPage.css';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Tab from '@/components/shared/Tab';
+import { TabContextProvider } from '@/components/shared/TabContext';
+import TabList from '@/components/shared/TabList';
+import TabPanel from '@/components/shared/TabPanel';
 import useFirebaseAuth from "@/components/featured/prikhody/useFirebaseAuth";
 import {getDatabase, ref} from "firebase/database";
 import {useList} from "react-firebase-hooks/database";
@@ -21,6 +22,15 @@ import SendArchivesData from "@/components/featured/prikhody/SendArchivesData";
 import useMarkersBounds from "@/components/featured/prikhody/useMarkersBounds";
 import BoundsToMapItems from "@/components/featured/prikhody/BoundsToMapItems";
 import DataTable from "@/components/featured/prikhody/DataTable";
+
+const StyledBoxWithTypography = styled.div`
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+`;
 
 const InfoPage = ({archives, prikhod, digited, rejected}: any) => {
     const [objectID, title, pTitle, pType, lat, lng, src, atd] = prikhod;
@@ -59,8 +69,8 @@ const InfoPage = ({archives, prikhod, digited, rejected}: any) => {
 
     const markersBounds = useMarkersBounds(currentPrikhodNPs);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+    const handleChange = (event: React.SyntheticEvent, newValue: string | number) => {
+        setValue(newValue as number);
     };
     const goBack = () => {
         if (history.length > 2) {
@@ -78,27 +88,24 @@ const InfoPage = ({archives, prikhod, digited, rejected}: any) => {
                     variant="outlined"
                     onClick={() => setShow(true)}
                 >Информация о приходе</Button>
-                <IconButton aria-label="delete" onClick={goBack} sx={{zIndex: 400, backgroundColor: '#fff'}}>
+                <IconButton ariaLabel="delete" onClick={goBack} sx={{zIndex: 400, backgroundColor: '#fff'}}>
                     <CloseIcon/>
                 </IconButton>
             </Box>
             {
                 show ? <>
                     <Drawer open={true} anchor="bottom" sx={{height: '100vh'}}>
-                        <Box sx={{ width: '100%', typography: 'body1' }}>
-                            <TabContext value={value}>
-                                <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper' }}>
-                                    <IconButton className="close-button-card" aria-label="delete" onClick={() => setShow(false)}>
+                        <StyledBoxWithTypography>
+                            <TabContextProvider value={value} onChange={handleChange}>
+                                <Box sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)', backgroundColor: '#fff' }}>
+                                    <IconButton className="close-button-card" ariaLabel="delete" onClick={() => setShow(false)}>
                                         <CloseIcon/>
                                     </IconButton>
                                     <TabList
-                                        // wrapped
                                         onChange={handleChange}
                                         variant="scrollable"
                                         scrollButtons={true}
                                         visibleScrollbar={false}
-                                        // variant="fullWidth"
-                                        // centered
                                         aria-label="lab API tabs example"
                                     >
                                         <Tab label="Сохранность документов" value={1} />
@@ -130,8 +137,8 @@ const InfoPage = ({archives, prikhod, digited, rejected}: any) => {
                                         {loading}
                                     </div>
                                 </TabPanel>
-                            </TabContext>
-                        </Box>
+                            </TabContextProvider>
+                        </StyledBoxWithTypography>
                     </Drawer>
                 </> : <></>
             }

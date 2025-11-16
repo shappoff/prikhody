@@ -1,9 +1,8 @@
 import React from "react";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DoneIcon from '@mui/icons-material/Done';
+import { ContentCopyIcon, DoneIcon } from "./icons";
 import {copyToClipboard} from "@/components/utils";
-import Tooltip from '@mui/material/Tooltip';
-import Snackbar from '@mui/material/Snackbar';
+import Tooltip from './Tooltip';
+import Snackbar from './Snackbar';
 
 // Props interface for the CopyToClipboardData component
 interface CopyToClipboardDataProps {
@@ -20,7 +19,7 @@ const CopyToClipboardData: React.FC<CopyToClipboardDataProps> = ({data, callback
         {
             isCopied ?
                 <>
-                    <DoneIcon sx={{fontSize: '15px'}}/>
+                    <DoneIcon fontSize="small" style={{fontSize: '15px'}}/>
                 </> :
                 <>
                     <Tooltip title="Скопировать шифр дела">
@@ -32,7 +31,8 @@ const CopyToClipboardData: React.FC<CopyToClipboardDataProps> = ({data, callback
                                     callback && callback()
                                 });
                             }}
-                            sx={{
+                            fontSize="small"
+                            style={{
                                 fontSize: '15px',
                                 cursor: 'pointer'
                             }}

@@ -3,8 +3,8 @@
 import PrikhodPlaceMarker from "@/components/featured/prikhody/PrikhodPlaceMarker";
 import { useRouter } from 'next/navigation'
 
-import Chip from '@mui/material/Chip';
-import InfoIcon from '@mui/icons-material/Info';
+import Chip from '@/components/shared/Chip';
+import { InfoIcon } from '@/components/shared/icons';
 
 const Markers = ({items, markerLabel}: any) => {
     const isDev = !!~location.search.indexOf('debug');

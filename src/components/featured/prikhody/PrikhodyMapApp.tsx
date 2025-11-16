@@ -4,10 +4,10 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../app/prikhody.css';
 
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@/components/shared/CircularProgress';
+import Box from '@/components/shared/Box';
+import TextField from '@/components/shared/TextField';
+import Autocomplete from '@/components/shared/Autocomplete';
 import {MapContainer} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/styles';
@@ -245,7 +245,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                                 }
                             }
                         }}
-                        renderInput={(params) => <TextField {...params} label="Церковь / Костел" placeholder="Начните вводить" />}
+                        renderInput={(params) => <TextField {...params} label="Церковь / Костел" placeholder="Начните вводить" size="small" />}
                     />
                     <Autocomplete
                         blurOnSelect
@@ -278,7 +278,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                                 }
                             }
                         }}
-                        renderInput={(params) => <TextField {...params} label="Уезд / Район" />}
+                        renderInput={(params) => <TextField {...params} label="Уезд / Район" size="small" />}
                     />
                 </Box>
             </div>

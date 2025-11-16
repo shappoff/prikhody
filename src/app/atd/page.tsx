@@ -4,9 +4,9 @@ import {prikhodyMainDataPath} from "@/components/paths";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 const cyrillicToTranslit: any = new (CyrillicToTranslit as any);
 import './atd.css';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import List from '@/components/shared/List';
+import ListItem from '@/components/shared/ListItem';
+import ListItemText from '@/components/shared/ListItemText';
 
 
 export const metadata: Metadata = {

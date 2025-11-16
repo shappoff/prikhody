@@ -1,14 +1,22 @@
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
+import DataGrid from '@/components/shared/DataGrid';
+import Paper from '@/components/shared/Paper';
 import CopyToClipboardData from "@/components/shared/CopyToClipboardData";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from '@/components/shared/Tooltip';
 import Link from "next/link";
 import {getNestedArrayValue} from "@/components/utils";
-import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
-import DoNotTouchOutlinedIcon from '@mui/icons-material/DoNotTouchOutlined';
-import LinkIcon from '@mui/icons-material/Link';
+import { DocumentScannerOutlinedIcon, DoNotTouchOutlinedIcon, LinkIcon } from '@/components/shared/icons';
 import Image from 'next/image';
+
+interface GridColDef {
+    field: string;
+    headerName?: string;
+    width?: number;
+    sortable?: boolean;
+    type?: string;
+    description?: string;
+    renderCell?: (params: { row: any; value: any; field: string }) => React.ReactNode;
+}
 
 const paginationModel = { page: 0, pageSize: 10 };
 
@@ -16,15 +24,15 @@ export default function DataTable({data, digited, rejected}: any) {
     const columns: GridColDef[] = [
         { field: 'copy', headerName: 'скопировать', width: 120,
             sortable: false,
-            renderCell: (params) => {
-                const {year, type, short, fod, link, full, fond, opis, delo, id} = params.row;
+            renderCell: ({ row }) => {
+                const {year, type, short, fod, link, full, fond, opis, delo, id} = row;
                 return <CopyToClipboardData data={`${short} ${fod}, ${type}, ${year}`} />;
             }
         },
         { field: 'short', headerName: 'архив', width: 130,
-            renderCell: (params) => {
-                const {year, type, short, fod, link, full, fond, opis, delo, id} = params.row;
-                return <Tooltip arrow title={full}><u>{short}</u></Tooltip>;
+            renderCell: ({ row }) => {
+                const {year, type, short, fod, link, full, fond, opis, delo, id} = row;
+                return <Tooltip arrow title={full || ''}><u>{short}</u></Tooltip>;
             }
 
         },
@@ -42,8 +50,8 @@ export default function DataTable({data, digited, rejected}: any) {
             headerName: 'Ф-О-Д',
             description: 'Фонд-Опись-Дело',
             width: 160,
-            renderCell: (params) => {
-                const {year, type, short, fod, link, full, fond, opis, delo, id} = params.row;
+            renderCell: ({ row }) => {
+                const {year, type, short, fod, link, full, fond, opis, delo, id} = row;
                 return <React.Fragment>
                     {
                         short === 'НИАБ' ? <Link target="_blank" href={`${location.origin}/niab/${fond}`}><u>{fond}</u></Link> : fond
@@ -57,8 +65,8 @@ export default function DataTable({data, digited, rejected}: any) {
             headerName: 'информация',
             sortable: false,
             width: 160,
-            renderCell: (params) => {
-                const {year, type, short, fod, link, full, fond, opis, delo, id} = params.row;
+            renderCell: ({ row }) => {
+                const {year, type, short, fod, link, full, fond, opis, delo, id} = row;
                 return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around', height: '100%'}}>
                     {
                         link ? <>
@@ -78,7 +86,7 @@ export default function DataTable({data, digited, rejected}: any) {
                         getNestedArrayValue(digited, fond, opis, delo) && short === 'НИАБ' ? <>
                             <Tooltip arrow title="Оцифрованно в НИАБ согласно перечню цифровых копий, имеющихся в фонде пользования">
                                 <Link target="_blank" href="https://docs.google.com/spreadsheets/d/1eKuTaDS5g8xCZX35N14Kyy9a01saGEya/">
-                                    <DocumentScannerOutlinedIcon sx={{ fontSize: 20, cursor: 'pointer' }} />
+                                    <DocumentScannerOutlinedIcon style={{ fontSize: 20, cursor: 'pointer' }} />
                                 </Link>
                             </Tooltip>
                         </> : ''
@@ -87,7 +95,7 @@ export default function DataTable({data, digited, rejected}: any) {
                         getNestedArrayValue(rejected, fond, opis, delo) && short === 'НИАБ' ? <>
                             <Tooltip arrow title="Отказано в выдаче. Подробнее в таблице.">
                                 <Link target="_blank" href="https://docs.google.com/spreadsheets/d/1ohjiRoVObt41N7oRhQb9b2Sq9UiBsUKTGbDQ7DQp9Zc/">
-                                    <DoNotTouchOutlinedIcon sx={{ fontSize: 20, cursor: 'pointer' }} />
+                                    <DoNotTouchOutlinedIcon style={{ fontSize: 20, cursor: 'pointer' }} />
                                 </Link>
                             </Tooltip>
                         </> : ''
