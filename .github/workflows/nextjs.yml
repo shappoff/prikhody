@@ -75,8 +75,6 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
-      - name: Prepare Next.js cache dir
-        run: mkdir -p .next/cache
       - name: Restore cache
         uses: actions/cache@v4
         with:
