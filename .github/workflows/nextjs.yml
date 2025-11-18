@@ -31,15 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Free disk space
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          tool-cache: true
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true
       - name: Clean up disk space
         run: |
           sudo apt clean || true
@@ -130,9 +121,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
-      - name: Remove build caches
-        run: |
-          rm -rf .next .next/cache node_modules ~/.npm ~/.cache
       - name: Remove store folder
         run: rm -rf ./src/app/store
 
