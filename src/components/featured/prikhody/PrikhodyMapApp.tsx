@@ -4,7 +4,6 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../app/prikhody.css';
 
-import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
