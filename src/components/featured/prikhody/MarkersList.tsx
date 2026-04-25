@@ -1,21 +1,25 @@
 'use client'
 
+import { memo, useMemo } from "react";
 import PrikhodPlaceMarker from "@/components/featured/prikhody/PrikhodPlaceMarker";
 import { useRouter } from 'next/navigation'
 
 import Chip from '@mui/material/Chip';
 import InfoIcon from '@mui/icons-material/Info';
 
+const EMPTY_MARKERS: any[] = [];
+
 const Markers = ({items, markerLabel}: any) => {
-    const isDev = !!~location.search.indexOf('debug');
+    const isDev = useMemo(() => !!~location.search.indexOf('debug'), []);
     const router = useRouter();
+    const safeItems = Array.isArray(items) ? items : EMPTY_MARKERS;
+    const markers = useMemo(() => safeItems.filter((hit: any) => {
+        const [, , , , lat, lng] = hit;
+        return !!lat && !!lng;
+    }), [safeItems]);
 
-    return items.map((hit: any) => {
+    return markers.map((hit: any) => {
         const [objectID, title, pTitle, pType, lat, lng, src, atd] = hit;
-
-        if (!lat || !lng) {
-            return null;
-        }
 
         return <PrikhodPlaceMarker
             key={objectID}
@@ -33,4 +37,4 @@ const Markers = ({items, markerLabel}: any) => {
     });
 };
 
-export default Markers;
+export default memo(Markers);

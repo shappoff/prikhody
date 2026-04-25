@@ -1,5 +1,5 @@
 import {useMap} from "react-leaflet";
-import React from "react";
+import { useEffect } from "react";
 
 // Define type for SetMapSizeOnChange props
 interface SetMapSizeOnChangeProps {
@@ -9,13 +9,17 @@ interface SetMapSizeOnChangeProps {
 
 const SetMapSizeOnChange = ({ top, height }: SetMapSizeOnChangeProps) => {
     const map = useMap();
-    React.useEffect(() => {
-        if (map != null) {
-            map.invalidateSize();
+    useEffect(() => {
+        if (!map) {
+            return;
         }
+
+        const mapContainer = map.getContainer();
+        mapContainer.style.top = top;
+        mapContainer.style.height = height;
+        mapContainer.style.position = 'relative';
+        map.invalidateSize();
     }, [map, top, height]);
-    const mapContainer = map.getContainer();
-    mapContainer.style.cssText = `top: ${top};height: ${height};position: relative;`;
 
     return <div/>;
 }

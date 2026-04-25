@@ -11,40 +11,41 @@ import { renderToStaticMarkup } from "react-dom/server";
 import Link from "next/link";
 import Image from 'next/image';
 import IndicateButton from "@/components/featured/prikhody/IndicateButton";
-import React from "react";
+import { memo, useMemo, useRef } from "react";
 
 const PrikhodPlaceMarker = ({hit, isDev, markerLabel = 'Сохранилось дел:', setCurrentLocIdInPopUp, selectCallback, children}: any) => {
-
-    const popupRef = React.createRef<any>();
+    const popupRef = useRef<any>(null);
 
     const [objectID, title, pTitle, pType, lat, lng, src, atd] = hit;
-    const [prtitle, type] = objectID.split('_');
-    const redLink = `https://radzima.net/ru/${type}/${prtitle}.html`;
-    const atdList = atd?.split('|');
-    const isOrtodox = !!~title.indexOf('церковь');
+    const [prtitle, type] = useMemo(() => objectID.split('_'), [objectID]);
+    const redLink = useMemo(() => `https://radzima.net/ru/${type}/${prtitle}.html`, [type, prtitle]);
+    const atdList = useMemo(() => atd?.split('|'), [atd]);
+    const isOrtodox = useMemo(() => !!~title.indexOf('церковь'), [title]);
+    const markerIcon = useMemo(() => new DivIcon({
+        html: renderToStaticMarkup(
+            <div className="badge-wrapper"
+                 style={{
+                     fontSize: '10px',
+                     display: 'flex',
+                     flexDirection: 'column',
+                     alignItems: 'center',
+                     color: +src === 0 ? 'black' : isOrtodox ? 'red' : 'blue'
+                 }}
+            >
+                <span dangerouslySetInnerHTML={{__html: isOrtodox ? ortodoxCrossIcon : catholicCrossIcon}} />
+                <span>{src}</span>
+            </div>
+        ),
+        className: `marker-church-div-icon ${isOrtodox ? 'orthodox' : 'сatholic'} ${+src === 0 ? 'no-metrics' : ''}`
+    }), [src, isOrtodox]);
+
     return <Marker title={`${pType ? `${pType} ` : ''}${pTitle}, ${title}`}
                    eventHandlers={{
                        popupclose: (e: any) => {},
                        mouseover: (e: any) => {},
                        popupopen: (e: any) => {},
                    }}
-                   icon={new DivIcon({
-                       html: renderToStaticMarkup(
-                           <div className="badge-wrapper"
-                                style={{
-                                    fontSize: '10px',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    color: +src === 0 ? 'black' : isOrtodox ? 'red' : 'blue'
-                                }}
-                           >
-                               <span dangerouslySetInnerHTML={{__html: isOrtodox ? ortodoxCrossIcon : catholicCrossIcon}} />
-                               <span>{src}</span>
-                           </div>
-                       ),
-                       className: `marker-church-div-icon ${isOrtodox ? 'orthodox' : 'сatholic'} ${+src === 0 ? 'no-metrics' : ''}`
-                   })}
+                   icon={markerIcon}
                    position={[parseFloat(lat), parseFloat(lng)]}>
         <Popup key="Popup" ref={popupRef}>
             <div>
@@ -80,4 +81,4 @@ const PrikhodPlaceMarker = ({hit, isDev, markerLabel = 'Сохранилось �
     </Marker>
 };
 
-export default PrikhodPlaceMarker;
+export default memo(PrikhodPlaceMarker);

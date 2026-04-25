@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../app/prikhody.css';
 
@@ -33,27 +33,30 @@ const client = liteClient(
 );
 
 const PrikhodyMapApp = ({children, items}: any) => {
-    const filterBarRef = React.useRef(null);
+    const filterBarRef = useRef(null);
+    const requestCounterRef = useRef(0);
     const pathname = usePathname();
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const [selectedPrikhodItem, setSelectedPrikhodItem] = React.useState<any>();
-    const [selectedATDItem, setSelectedATDItem] = React.useState<any>();
-    const [searchTerm, setSearchTerm] = React.useState<string>('');
-    const [typoTolerance, setTypoTolerance] = React.useState<boolean>(true);
-    const [uOptions, setuOptions] = React.useState<Array<any>>([
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [selectedPrikhodItem, setSelectedPrikhodItem] = useState<any>();
+    const [selectedATDItem, setSelectedATDItem] = useState<any>();
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [typoTolerance, setTypoTolerance] = useState<boolean>(true);
+    const [uOptions, setuOptions] = useState<Array<any>>([
 
     ]);
-    const [prikhodyDataArray, setPrikhodyDataArray] = React.useState<any>([]);
+    const [prikhodyDataArray, setPrikhodyDataArray] = useState<any>([]);
 
     const size = useWindowSize();
     const router = useRouter();
     const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
-    const [rootWith, setRootWith] = React.useState(0);
-    const [filterBarHeight, setFilterBarHeight] = React.useState(0);
-    const [footerHeight, setFooterHeight] = React.useState(0);
+    const [rootWith, setRootWith] = useState(0);
+    const [filterBarHeight, setFilterBarHeight] = useState(0);
+    const [footerHeight, setFooterHeight] = useState(0);
 
-    React.useEffect(() => {
+    useEffect(() => {
+        const currentRequest = requestCounterRef.current + 1;
+        requestCounterRef.current = currentRequest;
 
         setPrikhodyDataArray([]);
         if (debouncedSearchTerm && debouncedSearchTerm.length) {
@@ -67,6 +70,9 @@ const PrikhodyMapApp = ({children, items}: any) => {
                 }]
             })
                 .then(({results}: any) => {
+                    if (requestCounterRef.current !== currentRequest) {
+                        return;
+                    }
                     const hits = results?.[0]?.hits ?? [];
 
                     const withCoords: Array<any> = [];
@@ -81,15 +87,18 @@ const PrikhodyMapApp = ({children, items}: any) => {
                     });
                     setPrikhodyDataArray(withCoords);
                 }).finally(() => {
-                setIsLoading(false);
+                if (requestCounterRef.current === currentRequest) {
+                    setIsLoading(false);
+                }
             });
         } else {
             setPrikhodyDataArray([]);
+            setIsLoading(false);
         }
 
     }, [debouncedSearchTerm]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const resultList: any = document.getElementById('slide-panel-info1') ? document.getElementById('slide-panel-info1') : null;
         const filterBar: any = filterBarRef ? filterBarRef.current : null;
         const root = document.querySelector('body');
@@ -104,7 +113,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
         }
     }, [size]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setSearchTerm('');
         if (~pathname.indexOf('/p/') && !pathname.endsWith('/p/') && !pathname.endsWith('/p')) {
             setIsLoading(false);
@@ -113,14 +122,16 @@ const PrikhodyMapApp = ({children, items}: any) => {
                 return item[0] === selectedPathnameId
             });
 
-            setSelectedPrikhodItem({
-                label: `${selectedPrikhod[3]} ${selectedPrikhod[2]}, ${selectedPrikhod[1]}`,
-                value: selectedPrikhod[0],
-            });
+            if (selectedPrikhod) {
+                setSelectedPrikhodItem({
+                    label: `${selectedPrikhod[3]} ${selectedPrikhod[2]}, ${selectedPrikhod[1]}`,
+                    value: selectedPrikhod[0],
+                });
+            }
         }
     }, [pathname]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const atdObj: any = {};
         items.forEach(([, , , , , , , atdStr]: any) => {
             if (atdStr) {
@@ -161,12 +172,24 @@ const PrikhodyMapApp = ({children, items}: any) => {
         setuOptions(optionsItmes);
     }, [items]);
 
-    const searchHandler = (event: any) => {
+    const prikhodySearchOptions = useMemo(() => prikhodyDataArray.map(([objectID, title, pTitle, pType, lat, lng, src, atd]: any) => {
+        let atdLabel;
+        if (atd) {
+            atdLabel = atd.split('|').filter((item: string) => item.includes('уезд')) || null;
+        }
+
+        return {
+            label: `${pType} ${pTitle}, ${title}${atdLabel ? `, [${atdLabel}]` : ''}`,
+            value: objectID,
+        };
+    }), [prikhodyDataArray]);
+
+    const searchHandler = useCallback((event: any) => {
         if (event?.target.value) {
             setIsLoading(true);
         }
         setSearchTerm(event?.target.value);
-    }
+    }, []);
 
     const keysHandler = (e: any) => {
         if (e.which == 27) {
@@ -180,7 +203,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
             router.push('/')
         }
     };
-    React.useEffect(() => {
+    useEffect(() => {
         const dd = uOptions.find((v: any) => {
             return ~location.href.indexOf(v.value);
         });
@@ -219,17 +242,7 @@ const PrikhodyMapApp = ({children, items}: any) => {
                         onBlur={(e: any) => {
                             e.target.parentNode.parentNode.parentNode.style.flexGrow = 1;
                         }}
-                        options={prikhodyDataArray.map(([objectID, title, pTitle, pType, lat, lng, src, atd]: any) => {
-                            let atdLabel;
-                            if (atd) {
-                                atdLabel = atd.split('|').filter((item: string) => item.includes('уезд')) || null;
-                            }
-
-                            return {
-                                label: `${pType} ${pTitle}, ${title}${atdLabel ? `, [${atdLabel}]` : ''}`,
-                                value: objectID,
-                            };
-                        })}
+                        options={prikhodySearchOptions}
                         sx={{ flexGrow: 1 }}
                         onChange={(event: any, newValueItem: any | null) => {
                             if (newValueItem && newValueItem.value) {
