@@ -30,7 +30,7 @@ const noop = () => {};
 
 function WrapToMarkerClusterGroup({
     items,
-    maxClusterRadius = 150,
+    maxClusterRadius = 100,
     enable = true,
     bounds = false,
     markerLabel
@@ -47,6 +47,8 @@ function WrapToMarkerClusterGroup({
                     maxClusterRadius={maxClusterRadius}
                     removeOutsideVisibleBounds
                     chunkedLoading
+                    zoomToBoundsOnClick
+                    animate
                     showCoverageOnHover={false}
                 >
                     <Markers items={safeItems} markerLabel={markerLabel} />
