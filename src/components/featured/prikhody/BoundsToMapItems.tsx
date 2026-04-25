@@ -1,30 +1,30 @@
 import {useMap} from "react-leaflet";
-import React from "react";
+import { useCallback, useEffect } from "react";
 import {LayersControlEvent, LeafletEventHandlerFn} from "leaflet";
 
 const BoundsToMapItems = ({bounds, callback}: any) => {
     const map = useMap();
 
-    React.useEffect(() => {
+    useEffect(() => {
         const ms = setTimeout(() => {
             bounds && map.fitBounds(bounds);
         }, 100);
         return ()  => {
             ms && clearTimeout(ms);
         };
-    }, [bounds]);
+    }, [bounds, map]);
 
-    const baselayerchangeHandler: LeafletEventHandlerFn = (e: LayersControlEvent | any) => {
+    const baselayerchangeHandler: LeafletEventHandlerFn = useCallback((e: LayersControlEvent | any) => {
         callback && callback(e, map);
-    }
+    }, [callback, map]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         map.on("zoomend", baselayerchangeHandler);
 
         return () => {
             map.off("zoomend", baselayerchangeHandler);
         }
-    }, []);
+    }, [map, baselayerchangeHandler]);
 
     return <></>
 };
