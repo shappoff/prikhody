@@ -10,9 +10,14 @@ const Markers = ({items, markerLabel}: any) => {
     const isDev = !!~location.search.indexOf('debug');
     const router = useRouter();
 
-    return items.map((hit: any, indexMarker: number) => {
+    return items.map((hit: any) => {
         const [objectID, title, pTitle, pType, lat, lng, src, atd] = hit;
-        return lat && lng ? <PrikhodPlaceMarker
+
+        if (!lat || !lng) {
+            return null;
+        }
+
+        return <PrikhodPlaceMarker
             key={objectID}
             hit={hit}
             isMobile={true}
@@ -24,8 +29,8 @@ const Markers = ({items, markerLabel}: any) => {
                   onClick={() => router.push(`/p/${objectID}`)}
                   size="small"
             />
-        </PrikhodPlaceMarker> : <></>
-    })
+        </PrikhodPlaceMarker>;
+    });
 };
 
 export default Markers;
