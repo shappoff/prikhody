@@ -2,7 +2,13 @@ import fs from "fs";
 import {prikhodyMainDataPath} from "@/components/paths";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
+import type {Viewport} from "next";
 const cyrillicToTranslit: any = new (CyrillicToTranslit as any);
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+}
 
 type Params = {
     atd: string;

@@ -7,7 +7,12 @@ import {
 } from "@/components/paths";
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
 import InfoPage from "../../../components/featured/prikhody/InfoPage";
+import type {Viewport} from "next";
 
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+}
 
 type Params = {
     prikhod: string;

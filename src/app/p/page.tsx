@@ -1,4 +1,4 @@
-import {Metadata} from "next";
+import {Metadata, type Viewport} from "next";
 import fs from "fs";
 import {prikhodyMainDataPath} from "@/components/paths";
 
@@ -8,6 +8,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CreatePortalWrapper from "@/components/shared/CreatePortalWrapper";
 
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+}
 
 export const metadata: Metadata = {
     title: 'Список Церквей и Костелов Беларуси',
