@@ -1,5 +1,6 @@
 import type {Metadata, Viewport} from "next";
 import GAAnalytics from "@/components/shared/GAAnalytics";
+import YandexMetrika from "@/components/shared/YandexMetrika";
 import Prikhody from "@/components/featured/prikhody/Prikhody";
 import fs from "fs";
 import {prikhodyMainDataPath} from "@/components/paths";
@@ -32,7 +33,12 @@ export default function RootLayout({
   return (
     <html lang="ru">
     {
-      !!process.env.DEBUG ? <></> : <GAAnalytics />
+      !!process.env.DEBUG ? <></> : (
+        <>
+          <GAAnalytics />
+          <YandexMetrika />
+        </>
+      )
     }
       <body>
       <>
