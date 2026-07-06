@@ -5,7 +5,7 @@ import {Button} from "@mui/material";
 
 const SendArchivesData = ({objectID}: any) => {
     return <React.Fragment>
-        <Textarea placeholder="Прислать сохранность по приходу" minRows={3} slotProps={{
+        <Textarea placeholder="Свяжитесь с администратором,если нашли неточность или можете дополнить сохранность" minRows={3} slotProps={{
             textarea: {
                 id: 'new-fod-text',
             }
