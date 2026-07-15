@@ -4,7 +4,6 @@ import Paper from '@mui/material/Paper';
 import CopyToClipboardData from "@/components/shared/CopyToClipboardData";
 import Tooltip from '@mui/material/Tooltip';
 import Link from "next/link";
-import {getNestedArrayValue} from "@/components/utils";
 import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
 import DoNotTouchOutlinedIcon from '@mui/icons-material/DoNotTouchOutlined';
 import LinkIcon from '@mui/icons-material/Link';
@@ -12,7 +11,7 @@ import Image from 'next/image';
 
 const paginationModel = { page: 0, pageSize: 10 };
 
-export default function DataTable({data, digited, rejected}: any) {
+export default function DataTable({data}: any) {
     const columns: GridColDef[] = [
         { field: 'copy', headerName: 'скопировать', width: 120,
             sortable: false,
@@ -58,7 +57,7 @@ export default function DataTable({data, digited, rejected}: any) {
             sortable: false,
             width: 160,
             renderCell: (params) => {
-                const {year, type, short, fod, link, full, fond, opis, delo, id} = params.row;
+                const {short, link, isDigited, isRejected} = params.row;
                 return <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around', height: '100%'}}>
                     {
                         link ? <>
@@ -75,7 +74,7 @@ export default function DataTable({data, digited, rejected}: any) {
                             </Tooltip>
                         </> : <></>}
                     {
-                        getNestedArrayValue(digited, fond, opis, delo) && short === 'НИАБ' ? <>
+                        isDigited && short === 'НИАБ' ? <>
                             <Tooltip arrow title="Оцифрованно в НИАБ согласно перечню цифровых копий, имеющихся в фонде пользования">
                                 <Link target="_blank" href="https://docs.google.com/spreadsheets/d/1EqtOHMQ0Vg8qmc7VFIcAIkAlo3FWGtAj/">
                                     <DocumentScannerOutlinedIcon sx={{ fontSize: 20, cursor: 'pointer' }} />
@@ -84,7 +83,7 @@ export default function DataTable({data, digited, rejected}: any) {
                         </> : ''
                     }
                     {
-                        getNestedArrayValue(rejected, fond, opis, delo) && short === 'НИАБ' ? <>
+                        isRejected && short === 'НИАБ' ? <>
                             <Tooltip arrow title="Отказано в выдаче. Подробнее в таблице.">
                                 <Link target="_blank" href="https://docs.google.com/spreadsheets/d/1ohjiRoVObt41N7oRhQb9b2Sq9UiBsUKTGbDQ7DQp9Zc/">
                                     <DoNotTouchOutlinedIcon sx={{ fontSize: 20, cursor: 'pointer' }} />

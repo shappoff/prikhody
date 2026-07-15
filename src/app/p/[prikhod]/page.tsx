@@ -5,6 +5,7 @@ import {
     prikhodyMainDataPath,
     rejectedFormattedPath
 } from "@/components/paths";
+import { buildArchiveTableRows } from "@/components/featured/prikhody/buildArchiveTableRows";
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
 import InfoPage from "../../../components/featured/prikhody/InfoPage";
 import type {Viewport} from "next";
@@ -54,12 +55,14 @@ const PrikhodPage = async ({params}: any) => {
     const rejectedFormattedData = JSON.parse(fs.readFileSync(rejectedFormattedPath, 'utf8'));
     const prikhodyArchivesData = JSON.parse(fs.readFileSync(prikhodyArchivesDataPath, 'utf8'));
     const currentItem = allPrikhods.find((prkhd: any) => prkhd[0] === prikhod);
+    const archives = buildArchiveTableRows(
+        prikhodyArchivesData[prikhod] || [],
+        digitedFormattedData,
+        rejectedFormattedData,
+    );
 
     return <>
-        <InfoPage archives={prikhodyArchivesData[prikhod] || []}
-                  prikhod={currentItem}
-                  digited={digitedFormattedData}
-                  rejected={rejectedFormattedData} />
+        <InfoPage archives={archives} prikhod={currentItem} />
         <WrapToMarkerClusterGroup enable={false} items={[currentItem]} bounds={false} />
     </>
 };
