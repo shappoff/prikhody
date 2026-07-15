@@ -1,16 +1,12 @@
 'use client'
 
 import dynamic from "next/dynamic";
-import {useMemo, type ReactNode} from "react";
+import React from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-type PrikhodyProps = {
-    children: ReactNode;
-};
-
-const Prikhody = ({children}: PrikhodyProps) => {
-    const MapApp = useMemo(() => dynamic(
+const Prikhody = ({children, items}: any) => {
+    const MapApp = React.useMemo(() => dynamic(
         () => import('./PrikhodyMapApp'),
         {
             loading: () => <Box sx={{ position: 'absolute', top: '50%', right: '50%' }}>
@@ -19,7 +15,7 @@ const Prikhody = ({children}: PrikhodyProps) => {
             ssr: false
         }
     ), [])
-    return <MapApp key="map-page">{children}</MapApp>;
+    return <MapApp key="map-page" items={items}>{children}</MapApp>;
 };
 
 export default Prikhody;

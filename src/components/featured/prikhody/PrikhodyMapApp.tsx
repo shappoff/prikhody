@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../app/prikhody.css';
 
@@ -32,7 +32,7 @@ const client = liteClient(
     process.env.NEXT_PUBLIC_PPFF_ALGOLIA_SEARCH_API_KEY
 );
 
-const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
+const PrikhodyMapApp = ({children, items}: any) => {
     const filterBarRef = useRef(null);
     const requestCounterRef = useRef(0);
     const pathname = usePathname();
@@ -45,7 +45,6 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
 
     ]);
     const [prikhodyDataArray, setPrikhodyDataArray] = useState<any>([]);
-    const [items, setItems] = useState<any[]>([]);
 
     const size = useWindowSize();
     const router = useRouter();
@@ -54,31 +53,6 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
     const [rootWith, setRootWith] = useState(0);
     const [filterBarHeight, setFilterBarHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
-
-    useEffect(() => {
-        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-        let cancelled = false;
-
-        fetch(`${basePath}/data/prikhody-main.json`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load parish list (${response.status})`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                if (!cancelled && Array.isArray(data)) {
-                    setItems(data);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
 
     useEffect(() => {
         const currentRequest = requestCounterRef.current + 1;
@@ -155,7 +129,7 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
                 });
             }
         }
-    }, [pathname, items]);
+    }, [pathname]);
 
     useEffect(() => {
         const atdObj: any = {};
