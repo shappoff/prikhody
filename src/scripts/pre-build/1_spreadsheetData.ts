@@ -3637,7 +3637,7 @@ function writeFile(
 ) {
     fs.mkdir(getDirName(path), {recursive: true}, function (err) {
         if (err) return err;
-        const contentsString = JSON.stringify(contents);
+        const contentsString = JSON.stringify(contents, null, 2);
         fs.writeFileSync(path, contentsString, options);
     });
 }
