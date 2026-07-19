@@ -1,0 +1,22 @@
+.send-archives-contact {
+    margin-bottom: 1rem;
+}
+
+.send-archives-contact__hint {
+    margin: 0 0 0.75rem;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.send-archives-contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.send-archives-contact__email {
+    font-size: 0.9375rem;
+    word-break: break-all;
+}

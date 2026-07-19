@@ -106,7 +106,7 @@ const InfoPage = ({archives, prikhod}: any) => {
                                     </TabList>
                                 </Box>
                                 <TabPanel value={1}>
-                                    <SendArchivesData objectID={objectID} />
+                                    <SendArchivesData />
                                     <DataTable data={archives} />
                                 </TabPanel>
                                 <TabPanel value={2}>
