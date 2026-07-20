@@ -1,9 +1,8 @@
+import type {ReactNode} from "react";
 import type {Metadata, Viewport} from "next";
 import GAAnalytics from "@/components/shared/GAAnalytics";
 import YandexMetrika from "@/components/shared/YandexMetrika";
 import Prikhody from "@/components/featured/prikhody/Prikhody";
-import fs from "fs";
-import {prikhodyMainDataPath} from "@/components/paths";
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -25,11 +24,8 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
-
-  const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
-
   return (
     <html lang="ru">
     {
@@ -42,7 +38,7 @@ export default function RootLayout({
     }
       <body>
       <>
-        <Prikhody items={allPrikhods}>
+        <Prikhody>
           {children}
         </Prikhody>
         <div id="slide-panel-info" />

@@ -8,3 +8,5 @@ export const rejectedFormattedPath = path.resolve(`src/app/store/rejectedFormatt
 export const digitedFormattedDataPath = path.resolve(`src/app/store/digitedFormattedData.json`);
 export const prikhodyArchivesDataPath = path.resolve(`src/app/store/prikhodyArchivesData.json`);
 export const prikhodyMainDataPath = path.resolve(`src/app/store/prikhodyMainData.json`);
+
+export const prikhodyMainDataPublicPath = path.resolve(`public/data/prikhody-main.json`);

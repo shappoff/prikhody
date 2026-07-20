@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# Build-generated client data (copied from src/app/store by prebuild)
+/public/data/
+
 # production
 /build
 

@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
+const basePath = '/prikhody';
+
 const nextConfig: NextConfig = {
-    basePath: '/prikhody',
+    basePath,
+    env: {
+        NEXT_PUBLIC_BASE_PATH: basePath,
+    },
 };
 
 export default nextConfig;
