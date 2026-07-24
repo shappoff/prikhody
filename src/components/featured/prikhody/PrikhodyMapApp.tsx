@@ -40,7 +40,6 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
     const [selectedPrikhodItem, setSelectedPrikhodItem] = useState<any>();
     const [selectedATDItem, setSelectedATDItem] = useState<any>();
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [typoTolerance, setTypoTolerance] = useState<boolean>(true);
     const [uOptions, setuOptions] = useState<Array<any>>([
 
     ]);
@@ -92,7 +91,7 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
                     indexName: 'prikhodyIndex',
                     query: debouncedSearchTerm,
                     hitsPerPage: 1000,
-                    typoTolerance
+                    typoTolerance: true
                 }]
             })
                 .then(({results}: any) => {
@@ -102,13 +101,10 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
                     const hits = results?.[0]?.hits ?? [];
 
                     const withCoords: Array<any> = [];
-                    const noCoords: Array<any> = [];
                     hits.forEach((hit: any) => {
                         if (hit._geoloc?.lat) {
                             const {objectID, title, pTitle, pType, _geoloc, src, atd} = hit;
                             withCoords.push([objectID, title, pTitle, pType, _geoloc.lat, _geoloc.lng, src, atd.join('|')]);
-                        } else {
-                            noCoords.push(hit);
                         }
                     });
                     setPrikhodyDataArray(withCoords);
@@ -198,7 +194,7 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
         setuOptions(optionsItmes);
     }, [items]);
 
-    const prikhodySearchOptions = useMemo(() => prikhodyDataArray.map(([objectID, title, pTitle, pType, lat, lng, src, atd]: any) => {
+    const prikhodySearchOptions = useMemo(() => prikhodyDataArray.map(([objectID, title, pTitle, pType, , , , atd]: any) => {
         let atdLabel;
         if (atd) {
             atdLabel = atd.split('|').filter((item: string) => item.includes('уезд')) || null;
@@ -217,11 +213,6 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
         setSearchTerm(event?.target.value);
     }, []);
 
-    const keysHandler = (e: any) => {
-        if (e.which == 27) {
-            setSearchTerm('');
-        }
-    };
     const goBack = () => {
         if (history.length > 2) {
             router.back();
