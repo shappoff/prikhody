@@ -7,7 +7,6 @@ import '../../../app/prikhody.css';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {MapContainer} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/styles';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
@@ -18,6 +17,7 @@ import {usePathname} from 'next/navigation';
 
 import {useWindowSize} from "@/components/featured/prikhody/useWindowSize";
 import LayersControlComponent from "@/components/featured/prikhody/LayersControlComponent";
+import SafeMapContainer from "@/components/featured/prikhody/SafeMapContainer";
 import SetMapSizeOnChange from "@/components/featured/prikhody/SetMapSizeOnChange";
 import useDebounce from "@/components/shared/useDebounce";
 
@@ -323,10 +323,9 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
             {
                 isLoading ? <Spinner /> : <></>
             }
-            <MapContainer
+            <SafeMapContainer
                 attributionControl={false}
                 id="map"
-                key="map1"
                 center={[53.902287, 27.561824]}
                 zoom={7}
                 trackResize={true}
@@ -342,7 +341,7 @@ const PrikhodyMapApp = ({children}: {children: ReactNode}) => {
                         <WrapToMarkerClusterGroup items={prikhodyDataArray} />
                     </> : children
                 }
-            </MapContainer>
+            </SafeMapContainer>
         </div>;
 };
 
