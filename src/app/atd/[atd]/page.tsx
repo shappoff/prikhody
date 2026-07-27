@@ -2,13 +2,10 @@ import fs from "fs";
 import {prikhodyMainDataPath} from "@/components/paths";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
-import type {Viewport} from "next";
-const cyrillicToTranslit: any = new (CyrillicToTranslit as any);
+import {createPageMetadata} from "@/lib/seo/metadata";
+import {buildAtdSlugMap} from "@/lib/seo/atdSlugs";
 
-export const viewport: Viewport = {
-    width: 'device-width',
-    initialScale: 1,
-}
+const cyrillicToTranslit: any = new (CyrillicToTranslit as any);
 
 type Params = {
     atd: string;
@@ -19,59 +16,34 @@ export async function generateStaticParams(): Promise<Params[]> {
     if (!allPrikhods || allPrikhods.length === 0) {
         return [{ atd: 'not-found' }];
     }
-    const atdObj: any = {};
-    allPrikhods.forEach(([,,,,,,,atdStr]: any) => {
-        if (atdStr) {
-            const atdList = atdStr.split('|');
-            atdList.forEach((atd: string) => {
-                const converted = cyrillicToTranslit.transform(atd.trim(), '_').toLowerCase();
-                if (!atdObj[converted]) {
-                    atdObj[converted] = atd.trim();
-                }
-            });
-        }
-    });
-    const stPropsArr: Array<any> = [];
-    Object.keys(atdObj).forEach((item: any) => {
-        stPropsArr.push({atd: `${item}`});
-    })
 
-    return stPropsArr;
+    return Object.keys(buildAtdSlugMap(allPrikhods)).map((atd) => ({atd}));
 }
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: Promise<Params> }) {
     const {atd} = await params;
     const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
-    const atdObj: any = {};
-    allPrikhods.forEach(([,,,,,,,atdStr]: any) => {
-        if (atdStr) {
-            const atdList = atdStr.split('|');
-            atdList.forEach((atd: string) => {
-                const converted = cyrillicToTranslit.transform(atd.trim(), '_').toLowerCase();
-                if (!atdObj[converted]) {
-                    atdObj[converted] = atd.trim();
-                }
-            });
-        }
-    });
-
+    const atdObj = buildAtdSlugMap(allPrikhods);
     const title = atdObj[atd];
 
-    return {
-        title: `${title} | Карта приходов`,
-        description: `${title}, церкви и костелы. Сохранность документов. Метрические книги, исповедные росписи, брачные обыски. Карта приходов.`,
-        icons: [
-            {
-                url: '/map-icon.svg',
-                type: 'image/svg+xml',
-                sizes: 'any',
-                rel: 'icon'
-            }
-        ],
+    if (!title) {
+        return createPageMetadata({
+            title: 'АТД не найден',
+            description: 'Страница административно-территориальной единицы не найдена.',
+            path: `/atd/${atd}`,
+            noIndex: true,
+        });
     }
+
+    return createPageMetadata({
+        title,
+        description: `${title}, церкви и костелы. Сохранность документов. Метрические книги, исповедные росписи, брачные обыски.`,
+        path: `/atd/${atd}`,
+        keywords: [title, 'Беларусь', 'церкви', 'костелы', 'генеалогия', 'метрические книги'],
+    });
 }
 
-const FondPage = async ({params}: any) => {
+const FondPage = async ({params}: { params: Promise<Params> }) => {
     const {atd} = await params;
     const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
     const items = allPrikhods.filter(([,,,,,,,atdStr]: any) => atdStr && ~cyrillicToTranslit.transform(atdStr.trim(), '_').toLowerCase()?.indexOf(atd));
