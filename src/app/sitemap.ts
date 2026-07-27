@@ -3,6 +3,8 @@ import type {MetadataRoute} from 'next';
 import {prikhodyMainDataPath} from '@/components/paths';
 import {getAtdSlugs, type PrikhodRecord} from '@/lib/seo/atdSlugs';
 
+export const dynamic = 'force-static';
+
 const STATIC_ROUTES = [
     '/',
     '/p',
