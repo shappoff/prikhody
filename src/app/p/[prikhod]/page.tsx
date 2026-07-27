@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
     const location = atd?.split('|').join(', ') ?? '';
 
     return createPageMetadata({
-        title: `${pTitle}, ${title}`,
+        title: location ? `${pTitle}, ${title}, ${location}` : `${pTitle}, ${title}`,
         description: `${pType}, ${pTitle}, ${title}, ${location}. Сохранность документов. Метрические книги, исповедные росписи, брачные обыски.`,
         path: `/p/${prikhod}`,
         keywords: [title, pTitle, pType, 'Беларусь', 'генеалогия', 'метрические книги', ...(atd?.split('|') ?? [])],
