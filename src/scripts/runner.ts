@@ -22,6 +22,7 @@ const runAsync = async () => {
             } catch (e) {
                 console.error(`SCRIPT RUNNER: failed to execute pre-build script '${file}'`)
                 console.error(e)
+                throw e
             }
         }
     }
