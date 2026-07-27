@@ -3635,9 +3635,7 @@ function writeFile(
     contents: Object | Array<any>,
     options: WriteFileOptions = {encoding: 'utf8', flag: 'w'}
 ) {
-    fs.mkdir(getDirName(path), {recursive: true}, function (err) {
-        if (err) return err;
-        const contentsString = JSON.stringify(contents, null, 2);
-        fs.writeFileSync(path, contentsString, options);
-    });
+    fs.mkdirSync(getDirName(path), {recursive: true});
+    const contentsString = JSON.stringify(contents, null, 2);
+    fs.writeFileSync(path, contentsString, options);
 }
