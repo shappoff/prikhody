@@ -2,6 +2,7 @@ import fs from 'fs';
 import type {MetadataRoute} from 'next';
 import {prikhodyMainDataPath} from '@/components/paths';
 import {getAtdSlugs, type PrikhodRecord} from '@/lib/seo/atdSlugs';
+import {createAbsoluteUrl} from '@/lib/seo/metadata';
 
 export const dynamic = 'force-static';
 
@@ -20,19 +21,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const atdSlugs = getAtdSlugs(allPrikhods);
 
     const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((path) => ({
-        url: path,
+        url: createAbsoluteUrl(path),
         changeFrequency: path === '/' ? 'weekly' : 'monthly',
         priority: path === '/' ? 1 : 0.8,
     }));
 
     const prikhodEntries: MetadataRoute.Sitemap = allPrikhods.map(([id]) => ({
-        url: `/p/${id}`,
+        url: createAbsoluteUrl(`/p/${id}`),
         changeFrequency: 'monthly',
         priority: 0.7,
     }));
 
     const atdEntries: MetadataRoute.Sitemap = atdSlugs.map((slug) => ({
-        url: `/atd/${slug}`,
+        url: createAbsoluteUrl(`/atd/${slug}`),
         changeFrequency: 'monthly',
         priority: 0.6,
     }));
