@@ -1,32 +1,14 @@
-import {Metadata} from "next";
 import fs from "fs";
-import {
-    prikhodyMainDataPath,
-} from "@/components/paths";
+import {prikhodyMainDataPath} from "@/components/paths";
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
+import {createPageMetadata} from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-    title: 'Католические приходы | Карта приходов',
-    description: 'Католические приходы Беларуси. Генеалогия. Сохранность',
-    other: {
-        robots: "index, follow",
-        charset: "UTF-8",
-        image: '/map-icon.jpg',
-        url: 'https://shappoff.github.io/prikhody',
-        type: 'website'
-    },
+export const metadata = createPageMetadata({
+    title: 'Католические приходы',
+    description: 'Католические приходы Беларуси. Генеалогия. Сохранность метрических книг и исповедных росписей.',
+    path: '/catholics',
     keywords: ['Карта', 'Беларусь', 'Костелы', 'генеалогия', 'Сохранность'],
-    robots: { index: true, follow: true },
-    icons: [
-        {
-            url: '/map-icon.svg',
-            type: 'image/svg+xml',
-            sizes: 'any',
-            rel: 'icon'
-        }
-    ],
-
-};
+});
 
 export default function PrikhodyMapPage() {
     const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));

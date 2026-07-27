@@ -8,12 +8,9 @@ import {
 import { buildArchiveTableRows } from "@/components/featured/prikhody/buildArchiveTableRows";
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
 import InfoPage from "../../../components/featured/prikhody/InfoPage";
-import type {Viewport} from "next";
-
-export const viewport: Viewport = {
-    width: 'device-width',
-    initialScale: 1,
-}
+import JsonLd from "@/lib/seo/JsonLd";
+import {createPageMetadata} from "@/lib/seo/metadata";
+import {createPlaceOfWorshipJsonLd} from "@/lib/seo/structuredData";
 
 type Params = {
     prikhod: string;
@@ -28,27 +25,32 @@ export async function generateStaticParams(): Promise<Params[]> {
     return allPrikhods.map(([id]: any) => ({prikhod: id}));
 }
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: Promise<Params> }) {
     const {prikhod} = await params;
     const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
 
     const currentItem = allPrikhods.find((prkhd: any) => prkhd[0] === prikhod);
-    const [objectID, title, pTitle, pType, lat, lng, src, atd] = currentItem;
-    return {
-        title: `${pTitle}, ${title} | Карта приходов`,
-        description: `${pType}, ${pTitle}, ${title}, ${atd?.split('|').join(', ')}. Сохранность документов. Метрические книги, исповедные росписи, брачные обыски. Карта приходов.`,
-        icons: [
-            {
-                url: '/map-icon.svg',
-                type: 'image/svg+xml',
-                sizes: 'any',
-                rel: 'icon'
-            }
-        ],
+    if (!currentItem) {
+        return createPageMetadata({
+            title: 'Приход не найден',
+            description: 'Страница прихода не найдена на карте церквей и костёлов Беларуси.',
+            path: `/p/${prikhod}`,
+            noIndex: true,
+        });
     }
+
+    const [, title, pTitle, pType, , , , atd] = currentItem;
+    const location = atd?.split('|').join(', ') ?? '';
+
+    return createPageMetadata({
+        title: `${pTitle}, ${title}`,
+        description: `${pType}, ${pTitle}, ${title}, ${location}. Сохранность документов. Метрические книги, исповедные росписи, брачные обыски.`,
+        path: `/p/${prikhod}`,
+        keywords: [title, pTitle, pType, 'Беларусь', 'генеалогия', 'метрические книги', ...(atd?.split('|') ?? [])],
+    });
 }
 
-const PrikhodPage = async ({params}: any) => {
+const PrikhodPage = async ({params}: { params: Promise<Params> }) => {
     const {prikhod} = await params;
     const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
     const digitedFormattedData = JSON.parse(fs.readFileSync(digitedFormattedDataPath, 'utf8'));
@@ -62,6 +64,7 @@ const PrikhodPage = async ({params}: any) => {
     );
 
     return <>
+        {currentItem ? <JsonLd data={createPlaceOfWorshipJsonLd(currentItem)} /> : null}
         <InfoPage archives={archives} prikhod={currentItem} />
         <WrapToMarkerClusterGroup enable={false} items={[currentItem]} bounds={false} />
     </>

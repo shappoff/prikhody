@@ -1,4 +1,3 @@
-import {Metadata} from "next";
 import fs from "fs";
 import {
     digitedFormattedDataPath,
@@ -6,29 +5,14 @@ import {
     prikhodyMainDataPath,
 } from "@/components/paths";
 import WrapToMarkerClusterGroup from "@/components/featured/prikhody/WrapToMarkerClusterGroup";
+import {createPageMetadata} from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-    title: 'Оцифрованные дела НИАБ | Карта приходов',
-    description: 'Оцифрованные дела НИАБ церквей и костелов Беларуси. Генеалогия. Сохранность',
-    other: {
-        robots: "index, follow",
-        charset: "UTF-8",
-        image: '/map-icon.jpg',
-        url: 'https://shappoff.github.io/prikhody',
-        type: 'website'
-    },
-    keywords: ['Карта', 'Беларусь', 'Церкви', 'Костелы', 'генеалогия', 'Сохранность'],
-    robots: { index: true, follow: true },
-    icons: [
-        {
-            url: '/map-icon.svg',
-            type: 'image/svg+xml',
-            sizes: 'any',
-            rel: 'icon'
-        }
-    ],
-
-};
+export const metadata = createPageMetadata({
+    title: 'Оцифрованные дела НИАБ',
+    description: 'Оцифрованные дела НИАБ церквей и костёлов Беларуси. Генеалогия. Сохранность архивных документов.',
+    path: '/digited',
+    keywords: ['Карта', 'Беларусь', 'Церкви', 'Костелы', 'генеалогия', 'Сохранность', 'НИАБ'],
+});
 
 export default function PrikhodyMapPage() {
     const allPrikhods = JSON.parse(fs.readFileSync(prikhodyMainDataPath, 'utf8'));
